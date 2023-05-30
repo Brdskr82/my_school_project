@@ -2,34 +2,30 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-# 创建主窗口
 root = tk.Tk()
 root.title("Julie’s party hire store rental details")
 
-# 设置窗口大小和位置
 root.geometry("600x400+100+100")
 
-# 创建变量来存储输入的数据
 customer_name = tk.StringVar()
 receipt_number = tk.StringVar()
-item_var = tk.StringVar()
-quantity_var = tk.IntVar(value=1)
+item_name = tk.StringVar()
+quantity_number = tk.IntVar(value=1)
 row_id = tk.StringVar()
 
-# 创建函数来处理提交按钮的点击事件
+
 def submit_data():
-    # 获取输入的数据
+
     name = customer_name.get()
     receipt = receipt_number.get()
-    item = item_var.get()
-    quantity = quantity_var.get()
+    item = item_name.get()
+    quantity = quantity_number.get()
 
     # 检查收据号码是否只包含数字
     if not receipt.isdigit():
         messagebox.showerror("Error", "Receipt Number can only be in numbers.")
         return
 
-    # 在 treeview 中插入一行数据
     tree.insert("", "end", values=(name, receipt, item, quantity))
 
     # 清空输入框中的数据
@@ -37,9 +33,9 @@ def submit_data():
     receipt_number_entry.delete(0, "end")
     quantity_spinbox.delete(0, "end")
 
-# 创建函数来处理删除按钮的点击事件
+
 def delete_data():
-    # 获取输入的行编号
+ 
     row_id_str = row_id.get()
 
     # 检查行编号是否只包含数字
@@ -73,17 +69,17 @@ receipt_number_entry.grid(row=1, column=1)
 # 创建下拉菜单来选择租用物品
 item_label = ttk.Label(root, text="Item:")
 item_label.grid(row=2, column=0, padx=10)
-item_combobox = ttk.Combobox(root, textvariable=item_var)
+item_combobox = ttk.Combobox(root, textvariable=item_name)
 item_combobox["values"] = ("Table", "Chair")
 item_combobox.grid(row=2, column=1)
 
-# 创建 spinbox 来选择租用数量
+# 创建 spinbox
 quantity_label = ttk.Label(root, text="Quantity:")
 quantity_label.grid(row=3, column=0, padx=10)
-quantity_spinbox = tk.Spinbox(root, from_=1, to=500, wrap=True,textvariable=quantity_var)
+quantity_spinbox = tk.Spinbox(root, from_=1, to=500, wrap=True,textvariable=quantity_number)
 quantity_spinbox.grid(row=3, column=1)
 
-# 创建提交按钮来提交数据
+# 创建提交按钮
 submit_button = ttk.Button(root, text="Submit", command=submit_data)
 submit_button.grid(row=4, column=0, padx=10)
 
@@ -114,9 +110,9 @@ tree.heading("quantity", text="Quantity", anchor="center")
 
 tree.grid(row=5, column=0, columnspan=4)
 
-# 创建退出按钮来退出程序
+# 创建退出按钮
 exit_button = ttk.Button(root, text="Exit", command=root.destroy)
 exit_button.grid(row=6, column=3)
 
-# 运行主循环
+
 root.mainloop()
