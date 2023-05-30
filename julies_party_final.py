@@ -5,91 +5,101 @@ from tkinter import ttk
 from tkinter import messagebox
 import ctypes
 
-# 设置DPI感知，使窗口大小适应屏幕
+# 设置DPI感知，使窗口大小适应屏幕分辨率
 ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
-# 创建主窗口
 root = tk.Tk()
-root.title("Julie's party hire store rental details") # 窗口标题
+root.title("Julie's party hire store rental details")
 
-# 创建标题标签
+# 创建标题居中显示
 title_label = tk.Label(root, text="Julie's party hire store rental details", font=("Arial", 16, "bold"))
-title_label.pack(pady=20) # 放置标题标签
+title_label.pack(pady=20)
 
-# 创建输入框和标签的function
-def create_entry(label_text):
-    frame = tk.Frame(root)
-    label = tk.Label(frame, text=label_text)
-    label.pack(side=tk.LEFT)
-    entry = tk.Entry(frame)
-    entry.pack(side=tk.RIGHT)
-    frame.pack(pady=5)
-    return entry
+# 创建输入框记录名字
+name_label = tk.Label(root, text="客户姓名")
+name_label.pack()
+name_entry = tk.Entry(root)
+name_entry.pack()
 
-# 创建输入框和标签
-name_entry = create_entry("Full Name:")
-receipt_entry = create_entry("Receipt Number:")
+# 创建输入框和标签来记录收据号码
+receipt_label = tk.Label(root, text="收据号码")
+receipt_label.pack()
+receipt_entry = tk.Entry(root)
+receipt_entry.pack()
 
-# 创建下拉菜单和标签
-item_frame = tk.Frame(root)
-item_label = tk.Label(item_frame, text="Item:")
-item_label.pack(side=tk.LEFT)
+# 创建下拉菜单和标签来记录租用物品
+item_label = tk.Label(root, text="租用物品")
+item_label.pack()
 item_var = tk.StringVar()
 item_options = ["Table", "Chair"]
-item_dropdown = ttk.Combobox(item_frame, textvariable=item_var, values=item_options)
-item_dropdown.pack(side=tk.RIGHT)
-item_frame.pack(pady=5)
+item_dropdown = ttk.Combobox(root, textvariable=item_var, values=item_options)
+item_dropdown.pack()
 
-# 创建spinbox和标签
-quantity_frame = tk.Frame(root)
-quantity_label = tk.Label(quantity_frame, text="Quantity:")
-quantity_label.pack(side=tk.LEFT)
-quantity_spinbox = tk.Spinbox(quantity_frame, from_=1, to=500, wrap=True)
-quantity_spinbox.pack(side=tk.RIGHT)
-quantity_frame.pack(pady=5)
+# 创建spinbox
+quantity_label = tk.Label(root, text="租用数量")
+quantity_label.pack()
+quantity_spinbox = tk.Spinbox(root, from_=1, to=500, wrap=True)
+quantity_spinbox.pack()
 
-# 创建treeview和标题
-tree_label = tk.Label(root, text="Rental details", font=("Arial", 14, "bold"))
+# 创建treeview
+tree_label = tk.Label(root, text="Rental details", font=("Arial", 12, "bold"))
 tree_label.pack(pady=10)
-tree_columns = ("ID", "Name", "Receipt Number", "Item", "Quantity")
-tree = ttk.Treeview(root, columns=tree_columns, show="headings")
-for col in tree_columns:
-    tree.heading(col, text=col)
+tree = ttk.Treeview(root, columns=("ID", "Name", "Receipt", "Item", "Quantity"), show="headings")
+tree.heading("ID", text="ID")
+tree.heading("Name", text="客户姓名")
+tree.heading("Receipt", text="收据号码")
+tree.heading("Item", text="租用物品")
+tree.heading("Quantity", text="租用数量")
 tree.pack()
 
-# 创建添加数据的function
-id_counter = 1 # 计数器
+# 定义一个变量来跟踪treeview中的行数
+row_id = 0
+
+# 定义一个function来添加数据到treeview中
 def add_data():
-    global id_counter
+    global row_id
+    
     name = name_entry.get()
-    receipt_number = receipt_entry.get()
+    receipt = receipt_entry.get()
     item = item_var.get()
     quantity = quantity_spinbox.get()
 
     # 检查收据号码是否只包含数字
-    if not receipt_number.isdigit():
-        messagebox.showerror("Error", "Receipt Number can only be in numbers")
+    if not receipt.isdigit():
+        messagebox.showerror("错误", "Receipt Number can only be in numbers")
         return
 
-    tree.insert("", "end", values=(id_counter, name, receipt_number, item, quantity))
-    id_counter += 1
+    # 在treeview中插入一行数据
+    row_id += 1
+    tree.insert("", "end", values=(row_id, name, receipt, item, quantity))
 
-# 创建删除功能
+# 定义一个函数来删除treeview中的数据
 def delete_data():
-    selected_items = tree.selection()
-    for item in selected_items:
-        tree.delete(item)
+    
+    id_to_delete = id_entry.get()
 
-# 创建按钮
-button_frame = tk.Frame(root)
-add_button = tk.Button(button_frame, text="Add Data", command=add_data)
-add_button.pack(side=tk.LEFT, padx=5)
-delete_button = tk.Button(button_frame, text="Delete Data", command=delete_data)
-delete_button.pack(side=tk.RIGHT, padx=5)
-button_frame.pack(pady=10)
+    # 遍历treeview中的所有行，找到匹配的行并删除
+    for row in tree.get_children():
+        if tree.item(row)["values"][0] == int(id_to_delete):
+            tree.delete(row)
+            break
+
+# 创建按钮来添加数据到treeview中
+add_button = tk.Button(root, text="添加数据", command=add_data)
+add_button.pack(pady=10)
+
+# 创建输入框和标签来获取要删除的行的ID
+id_label = tk.Label(root, text="输入要删除的行的ID")
+id_label.pack()
+id_entry = tk.Entry(root)
+id_entry.pack()
+
+# 创建按钮来删除treeview中的数据
+delete_button = tk.Button(root, text="删除数据", command=delete_data)
+delete_button.pack(pady=10)
 
 # 退出按钮
-exit_button = tk.Button(root, text="Exit", command=root.destroy)
-exit_button.pack(pady=10)
+exit_button = tk.Button(root, text="退出", command=root.destroy)
+exit_button.pack(pady=20)
 
 root.mainloop()

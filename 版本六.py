@@ -69,11 +69,10 @@ def add_data():
         messagebox.showerror("Error", "Receipt Number can only be in numbers")
         return
 
-
     tree.insert("", "end", values=(id_counter, name, receipt_number, item, quantity))
     id_counter += 1
 
-# 创建删除数据的函数
+# 创建删除功能
 def delete_data():
     selected_items = tree.selection()
     for item in selected_items:
