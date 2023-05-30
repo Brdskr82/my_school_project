@@ -69,11 +69,6 @@ def add_data():
         messagebox.showerror("错误", "Receipt Number can only be in numbers")
         return
 
-    # 检查租用数量是否超过500
-    if int(quantity) > 500:
-        messagebox.showerror("错误", "The quantity cannot be greater than 500")
-        return
-
     # 在treeview中插入一行数据
     row_id += 1
     tree.insert("", "end", values=(row_id, name, receipt, item, quantity))
@@ -95,22 +90,18 @@ def delete_data():
             tree.delete(row)
             break
 
-    # 更新剩余行的 ID 值以保持连续性
-    for i,row in enumerate(tree.get_children()):
-        tree.set(row,"ID",i+1)
-
 # 创建按钮来添加数据到treeview中
 add_button = tk.Button(root, text="添加数据", command=add_data)
 add_button.pack(pady=10)
 
-#创建输入框和标签来获取要删除的行的ID
-id_label = tk.Label(root, text="输入要删除的行的ID") 
-id_label.pack() 
-id_entry = tk.Entry(root) 
+# 创建输入框和标签来获取要删除的行的ID
+id_label = tk.Label(root, text="输入要删除的行的ID")
+id_label.pack()
+id_entry = tk.Entry(root)
 id_entry.pack()
 
-#创建按钮来删除treeview中的数据
-delete_button = tk.Button(root, text="删除数据", command=delete_data) 
+# 创建按钮来删除treeview中的数据
+delete_button = tk.Button(root, text="删除数据", command=delete_data)
 delete_button.pack(pady=10)
 
 #创建退出按钮

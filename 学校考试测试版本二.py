@@ -1,4 +1,3 @@
-# final assessment
 import tkinter as tk
 from tkinter import ttk
 
@@ -11,12 +10,13 @@ item_name = tk.StringVar()
 quantity_number = tk.IntVar(value=1)
 
 def submit_data():
-    # 获取数据
+    # 获取输入的数据
     name = customer_name.get()
     receipt = receipt_number.get()
     item = item_name.get()
     quantity = quantity_number.get()
 
+    # 在 treeview 中插入一行数据
     tree.insert("", "end", values=(name, receipt, item, quantity))
 
     # 清空输入框中的数据
@@ -24,11 +24,13 @@ def submit_data():
     receipt_number_entry.delete(0, "end")
     quantity_spinbox.delete(0, "end")
 
-# 创建函数删除按钮function
+# 创建函数来处理删除按钮的点击事件
 def delete_data():
     
+    # 获取 treeview 中选中的行
     selected_items = tree.selection()
 
+    # 删除选中的行
     for item in selected_items:
         tree.delete(item)
 
