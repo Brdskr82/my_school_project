@@ -61,6 +61,11 @@ def add_data():
     item = item_var.get()
     quantity = quantity_spinbox.get()
 
+    # 检查输入框是否为空
+    if not name or not receipt or not item or not quantity:
+        messagebox.showerror("错误", "输入信息存在空白")
+        return
+
     # 检查收据号码是否只包含数字
     if not receipt.isdigit():
         messagebox.showerror("错误", "Receipt Number can only be in numbers")
@@ -112,6 +117,7 @@ def delete_data():
     # 更新剩余行的ID
     for i,row in enumerate(tree.get_children()):
         tree.set(row,"ID",i+1)
+
 
 # 创建按钮来添加数据到treeview中
 add_button = tk.Button(root, text="添加数据", command=add_data)
