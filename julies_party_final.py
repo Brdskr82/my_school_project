@@ -52,6 +52,8 @@ quantity_spinbox.pack(side=tk.LEFT)
 
 row_id = 0
 
+maxLength = 15
+
 # Submit function
 def add_data():
     global row_id
@@ -62,6 +64,10 @@ def add_data():
     quantity = quantity_spinbox.get()
 
     # Checking for error
+    if len(name) > maxLength or len(receipt) > maxLength or len(item) > maxLength:
+        messagebox.showerror("Error", "Input cannot exceed 20 characters")
+        return
+    
     if not name or not receipt or not item or not quantity:
         messagebox.showerror("error", "The input information has blank")
         return
