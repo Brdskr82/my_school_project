@@ -89,6 +89,7 @@ def add_data():
 
 # Delete function
 def delete_data():
+    global row_id
 
     id_to_delete = id_entry.get()
 
@@ -109,6 +110,8 @@ def delete_data():
 
     for i,row in enumerate(tree.get_children()):
         tree.set(row,"ID",i+1)
+
+    row_id = i + 1
 
 
 # Create submit button
